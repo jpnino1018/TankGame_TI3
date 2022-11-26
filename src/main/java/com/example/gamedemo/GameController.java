@@ -1,10 +1,7 @@
 package com.example.gamedemo;
 
 
-import com.example.gamedemo.model.Avatar;
-import com.example.gamedemo.model.Bullet;
-import com.example.gamedemo.model.Enemy;
-import com.example.gamedemo.model.Vector;
+import com.example.gamedemo.model.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -32,6 +29,9 @@ public class GameController implements Initializable {
     private Avatar avatar2;
     private ArrayList<Enemy> enemies;
     private ArrayList<Bullet> bullets;
+    private ArrayList<Wall> walls;
+
+    private ArrayList<Avatar> players;
 
 
     //Estados de las teclas
@@ -56,13 +56,19 @@ public class GameController implements Initializable {
         enemies.add(new Enemy(canvas, 300, 100));
         enemies.add(new Enemy(canvas, 300, 300));
 
+        walls = new ArrayList<>();
+        walls.add(new Wall(canvas, 300, 200, 100, 10));
+
         bullets = new ArrayList<>();
 
         canvas.setOnKeyPressed(this::onKeyPressed);
         canvas.setOnKeyReleased(this::onKeyReleased);
 
-        avatar1 = new Avatar(canvas);
-        avatar2 = new Avatar(canvas);
+        players = new ArrayList<>();
+        avatar1 = new Avatar(canvas, 100, 100);
+        avatar2 = new Avatar(canvas, 500, 300);
+        players.add(avatar1);
+        players.add(avatar2);
 
         draw();
     }
@@ -80,6 +86,9 @@ public class GameController implements Initializable {
                             for (int i = 0; i < enemies.size(); i++) {
                                 enemies.get(i).draw();
                             }
+                            for (int i = 0; i < walls.size(); i++) {
+                                walls.get(i).draw();
+                            }
                             for (int i = 0; i < bullets.size(); i++) {
                                 bullets.get(i).draw();
                                 if (bullets.get(i).pos.x > canvas.getWidth() + 20 ||
@@ -91,8 +100,8 @@ public class GameController implements Initializable {
                             }
 
                             //Colisiones
-                            detectCollission();
-
+                            detectBulletCollission();
+                            detectBorderCollission();
                             doKeyboardActions();
 
                         });
@@ -107,7 +116,7 @@ public class GameController implements Initializable {
         ).start();
     }
 
-    private void detectCollission() {
+    private void detectBulletCollission() {
         for (int i = 0; i < enemies.size(); i++) {
             for (int j = 0; j < bullets.size(); j++) {
                 Bullet b = bullets.get(j);
@@ -121,11 +130,49 @@ public class GameController implements Initializable {
                     enemies.remove(i);
                     return;
                 }
+            }
+        }
+        for (int i = 0; i < walls.size(); i++) {
+            for (int j = 0; j < bullets.size(); j++) {
+                Bullet b = bullets.get(j);
+                Wall w = walls.get(i);
 
+                if (b.pos.x <= w.x+w.sizeX/2 && b.pos.x>=w.x-w.sizeX/2){
+                    if (b.pos.y <= w.y+w.sizeY/2 && b.pos.y>=w.y-w.sizeY/2){
+                        bullets.remove(j);
+                        return;
+                    }
+                }
             }
         }
     }
 
+    private void detectBorderCollission(){
+        if (avatar1.pos.x<=0){
+            avatar1.pos.x=0;
+        }
+        if (avatar1.pos.x>=canvas.getWidth()){
+            avatar1.pos.x=canvas.getWidth();
+        }
+        if (avatar1.pos.y<=0){
+            avatar1.pos.y=0;
+        }
+        if (avatar1.pos.y>=canvas.getHeight()){
+            avatar1.pos.y=canvas.getHeight();
+        }
+        if (avatar2.pos.x<=0){
+            avatar2.pos.x=0;
+        }
+        if (avatar2.pos.x>=canvas.getWidth()){
+            avatar2.pos.x=canvas.getWidth();
+        }
+        if (avatar2.pos.y<=0){
+            avatar2.pos.y=0;
+        }
+        if (avatar2.pos.y>=canvas.getHeight()){
+            avatar2.pos.y=canvas.getHeight();
+        }
+    }
     private void doKeyboardActions() {
         if (Wpressed) {
             avatar1.moveForward();
@@ -178,6 +225,18 @@ public class GameController implements Initializable {
         if (keyEvent.getCode() == KeyCode.RIGHT) {
             RIGHTpressed = false;
         }
+        if (keyEvent.getCode() == KeyCode.SPACE) {
+            Bullet bullet = new Bullet(canvas,
+                    new Vector(avatar1.pos.x,avatar1.pos.y),
+                    new Vector(2* avatar1.direction.x, 2* avatar1.direction.y));
+            bullets.add(bullet);
+        }
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            Bullet bullet = new Bullet(canvas,
+                    new Vector(avatar2.pos.x, avatar2.pos.y),
+                    new Vector(2* avatar2.direction.x, 2* avatar2.direction.y));
+            bullets.add(bullet);
+        }
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
@@ -194,12 +253,6 @@ public class GameController implements Initializable {
         if (keyEvent.getCode() == KeyCode.D) {
             Dpressed = true;
         }
-        if (keyEvent.getCode() == KeyCode.SPACE) {
-            Bullet bullet = new Bullet(canvas,
-                    new Vector(avatar1.pos.x, avatar1.pos.y),
-                    new Vector(2* avatar1.direction.x, 2* avatar1.direction.y));
-            bullets.add(bullet);
-        }
         if (keyEvent.getCode() == KeyCode.UP) {
             UPpressed = true;
         }
@@ -211,12 +264,6 @@ public class GameController implements Initializable {
         }
         if (keyEvent.getCode() == KeyCode.RIGHT) {
             RIGHTpressed = true;
-        }
-        if (keyEvent.getCode() == KeyCode.ENTER) {
-            Bullet bullet = new Bullet(canvas,
-                    new Vector(avatar2.pos.x, avatar2.pos.y),
-                    new Vector(2* avatar2.direction.x, 2* avatar2.direction.y));
-            bullets.add(bullet);
         }
     }
 

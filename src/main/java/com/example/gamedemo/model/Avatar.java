@@ -13,13 +13,19 @@ public class Avatar {
     public Vector pos;
     public Vector direction;
 
-    public Avatar(Canvas canvas){
+    public int initX=0;
+
+    public int initY=0;
+
+    public Avatar(Canvas canvas, int initX, int initY){
         this.canvas = canvas;
         gc = canvas.getGraphicsContext2D();
         String uri = "file:"+ GameMain.class.getResource("tank.png").getPath();
         tank = new Image(uri);
-        pos = new Vector(100,100);
+        pos = new Vector(initX,initY);
         direction = new Vector(2,2);
+        this.initX=initX;
+        this.initY=initY;
     }
 
     public void draw(){
@@ -28,10 +34,6 @@ public class Avatar {
         gc.rotate(90+direction.getAngle());
         gc.drawImage(tank, -25,-25, 50,50);
         gc.restore();
-    }
-    public void setPosition(double x, double y) {
-        pos.x = (int) x - 25;
-        pos.y = (int) y - 25;
     }
 
     public void changeAngle(double a){
