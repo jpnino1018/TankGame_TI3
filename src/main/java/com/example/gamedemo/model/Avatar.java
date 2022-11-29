@@ -12,20 +12,25 @@ public class Avatar {
     private Image tank;
     public Vector pos;
     public Vector direction;
+    public int initX;
+    public int initY;
+    public int lifes = 5;
+    public int magazineSize = 10;
+    public int bullets;
+    public String name;
 
-    public int initX=0;
 
-    public int initY=0;
-
-    public Avatar(Canvas canvas, int initX, int initY){
+    public Avatar(Canvas canvas, int initX, int initY, String name){
         this.canvas = canvas;
         gc = canvas.getGraphicsContext2D();
         String uri = "file:"+ GameMain.class.getResource("tank.png").getPath();
         tank = new Image(uri);
         pos = new Vector(initX,initY);
         direction = new Vector(2,2);
-        this.initX=initX;
-        this.initY=initY;
+        bullets = magazineSize;
+        this.initX = initX;
+        this.initY = initY;
+        this.name = name;
     }
 
     public void draw(){
