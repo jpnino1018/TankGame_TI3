@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="336.0" prefWidth="383.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.gamedemo.GameController">
+   <children>
+      <TableView fx:id="table" layoutX="81.0" layoutY="33.0" prefHeight="248.0" prefWidth="221.0">
+        <columns>
+          <TableColumn fx:id="Players" prefWidth="75.0" text="Players" />
+            <TableColumn fx:id="Victories" prefWidth="75.0" text="Victories" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

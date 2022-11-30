@@ -18,7 +18,13 @@ public class Avatar {
     public int magazineSize = 10;
     public int bullets;
     public String name;
+    public int wins = 0;
 
+
+    public Avatar(String name, int wins) {
+        this.name = name;
+        this.wins = wins;
+    }
 
     public Avatar(Canvas canvas, int initX, int initY, String name){
         this.canvas = canvas;

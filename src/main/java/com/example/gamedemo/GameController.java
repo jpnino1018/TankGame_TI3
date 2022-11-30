@@ -118,6 +118,7 @@ public class GameController implements Initializable {
                             detectBulletCollision();
                             detectBorderCollision();
                             detectWallCollision();
+                            deadDetection();
 
                             doKeyboardActions();
 
@@ -133,6 +134,25 @@ public class GameController implements Initializable {
         ).start();
     }
 
+   private void deadDetection(){
+       for (int i = 0; i < players.size(); i++) {
+           for (int j = 0; j < bullets.size(); j++) {
+               Bullet b = bullets.get(j);
+               Avatar a = players.get(i);
+
+               double c1 = b.pos.x - a.pos.x;
+               double c2 = b.pos.y - a.pos.y;
+               double distance = Math.sqrt(Math.pow(c1, 2) + Math.pow(c2, 2));
+               if (  players.get(j).lifes == 0) {
+                   bullets.remove(j);
+                   players.remove(i);
+                   return;
+               }else {
+                  players.get(j).lifes = players.get(j).lifes - 1;
+               }
+           }
+       }
+   }
     private void detectBulletCollision() {
         for (int i = 0; i < enemies.size(); i++) {
             for (int j = 0; j < bullets.size(); j++) {
