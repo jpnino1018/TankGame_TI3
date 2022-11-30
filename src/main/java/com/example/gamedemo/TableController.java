@@ -24,16 +24,17 @@ public class TableController implements Initializable {
     @FXML
     private TableView<Avatar> table;
 
-    ObservableList<Avatar> list = FXCollections.observableArrayList(
-            new Avatar("mc.name1", 0),
-            new Avatar("mc.name2", 0),
-            new Avatar("mc.name3", 0)
-    );
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        mc = new MenuController();
         Players.setCellValueFactory(new PropertyValueFactory<Avatar, String>("name"));
         Victories.setCellValueFactory(new PropertyValueFactory<Avatar, Integer>("wins"));
             table.setItems(list);
     }
+
+    ObservableList<Avatar> list = FXCollections.observableArrayList(
+            new Avatar(mc.name1, 0),
+            new Avatar(mc.name2, 0),
+            new Avatar(mc.name3, 0)
+    );
 }

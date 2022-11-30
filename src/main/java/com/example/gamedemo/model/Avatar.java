@@ -16,9 +16,10 @@ public class Avatar {
     public int initY;
     public int lifes = 5;
     public int magazineSize = 10;
-    public int bullets;
+    public int bulletsInMagazine;
     public String name;
     public int wins = 0;
+
 
 
     public Avatar(String name, int wins) {
@@ -33,7 +34,7 @@ public class Avatar {
         tank = new Image(uri);
         pos = new Vector(initX,initY);
         direction = new Vector(2,2);
-        bullets = magazineSize;
+        bulletsInMagazine = magazineSize;
         this.initX = initX;
         this.initY = initY;
         this.name = name;
